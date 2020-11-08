@@ -1,5 +1,6 @@
 from typing import Any
 from abstract_handler import AbstractHandler
+from converter import Converter
 from handler import Handler
 
 
@@ -12,12 +13,10 @@ class ConverterHandler(AbstractHandler):
         self.next_handler = handler
 
     def handle(self, request: Any) -> []:
-        conversion = Converter()
-        assert (request is not None)
-        assert request != ''
-        with open(request, 'r') as src_code:
-            all_lines = src_code.readlines()
-        data = conversion.convert(all_lines)
+        classes = get_class(request)
+        functions = get_function(classes)
+        attributes = get_attributes(functions)
+        formatted =  classes, functions, attributes
         if data:
             try:
                 self.next_handler(data)

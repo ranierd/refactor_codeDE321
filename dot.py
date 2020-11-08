@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-class Dot():
+class Dot:
 
     def __init__(self):
         self.result = ""
