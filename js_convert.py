@@ -81,4 +81,3 @@ class JSConvert(IBuilder):
                 if attribute:
                     attributes.append(attribute[0])
         return classes
-

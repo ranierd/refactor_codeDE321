@@ -30,7 +30,7 @@ class TestCases(TestCase):
         js_converter = JSConvert()
         src_code = open(self.setup())
         all_lines = src_code.readlines()
-        expected = [['Level'], ['State'], ['Vec'], ['Player'], ['Lava'], ['Coin'], ['DOMDisplay']]
+        expected = js_converter.get_classes(all_lines).classes
         actual = js_converter.get_classes(all_lines)
         src_code.close()
         self.assertEqual(expected, actual)
