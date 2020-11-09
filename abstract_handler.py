@@ -11,7 +11,7 @@ class AbstractHandler(Handler):
 
     next_handler: Handler = None
 
-    def set_next_handler(self, handler: Handler) -> str:
+    def set_next_handler(self, handler: Handler) -> None:
         self.next_handler = handler
         return handler
 

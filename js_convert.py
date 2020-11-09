@@ -1,7 +1,9 @@
+from itertools import cycle
 from re import findall, search
+from i_builder import IBuilder
 
 
-class JSConvert:
+class JSConvert(IBuilder):
 
     def get_classes(self, data: []):
         classes = []
@@ -9,7 +11,7 @@ class JSConvert:
             for line in data:
                 result = search("class .* {", line)
                 if result:
-                    classes.append(findall(r'class .* {', line))
+                    classes.append(findall(r'class (\S+).*{', line))
             return classes
         except (AssertionError, FileNotFoundError, PermissionError, AttributeError) as e:
             print(e)
@@ -32,17 +34,51 @@ class JSConvert:
                 attribute = findall(r'this\.(\S+)', line)
                 if attribute:
                     attributes.append(attribute)
-            print(attributes)
+            return attributes
         except (AssertionError, TypeError, AttributeError) as e:
             print(e)
 
+    def merge(self, data: []):
+        classes = []
+        functions = []
+        attributes = []
+        in_class = False
+        in_function = False
+        bracket_count = 0
+        current_class = ""
+        for line in data:
+            if (not in_class) & (current_class == ""):
+                result = search("class .* {", line)
+                if result is not None:
+                    current_class = findall(r'class (\S+).*{', line)
+                    in_class = True
+            elif in_class:
+                if in_function:
+                    r = findall('{', line)
+                    if len(r) > 0:
+                        bracket_count += len(r)
+                    r = findall('}', line)
+                    if r:
+                        if bracket_count > 0:
+                            bracket_count -= len(r)
+                        if bracket_count == 0:
+                            in_function = False
+                            continue
+                elif not in_function:
+                    result = search(r'\S(.*).*{', line)
+                    if result is not None:
+                        current_level = findall(r'(\S+)[(].*[)].*{', line)
+                        functions.append(current_level[0] + "()")
+                        in_function = True
+                        continue
+                    elif findall('}', line):
+                        in_class = False
+                        classes.append(tuple([current_class[0], tuple(functions), tuple(attributes)]))
+                        attributes.clear()
+                        functions.clear()
+                        current_class = ""
+                attribute = findall(r'this\.(\S+)', line)
+                if attribute:
+                    attributes.append(attribute[0])
+        return classes
 
-
-if __name__ == '__main__':
-    src_code = open("H:\\Ranier and Daniels python-assignment-2\\resources\\16_game.js")
-    all_lines = src_code.readlines()
-    js = JSConvert
-    js.get_classes(all_lines, all_lines)
-    js.get_functions(all_lines, all_lines)
-    js.get_attributes(all_lines,all_lines)
-    src_code.close()

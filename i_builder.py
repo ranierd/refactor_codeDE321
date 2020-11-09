@@ -3,17 +3,17 @@ from abc import ABC, abstractmethod
 
 class IBuilder(ABC):
 
-    def set_classes(self, value):
+    def get_classes(self, value):
         """
-        Set classes
-        """
-
-    def set_functions(self, value):
-        """
-        Set functions
+        Get classes
         """
 
-    def set_attributes(self, attributes):
+    def get_functions(self, value):
         """
-        Set attributes
+        Get functions
+        """
+
+    def get_attributes(self, attributes):
+        """
+        Get attributes
         """
