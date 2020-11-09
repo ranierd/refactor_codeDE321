@@ -7,8 +7,7 @@ from handler import Handler
 def client_code(handler: Handler) -> None:
     data = "C:\\Users\\Ranier\\Downloads\\python-assignment-master\\resources\\16_game.js"
     result = handler.handle(data)
-    if result:
-        print(f"{result}")
+    print(result)
 
 
 if __name__ == '__main__':
@@ -17,7 +16,7 @@ if __name__ == '__main__':
     convert = ConverterHandler()
     dot = DotHandler()
 
-    extract.set_next_handler(convert).set_next_handler(dot)
+    extract.set_next_handler(convert)
 
     client_code(extract)
 

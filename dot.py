@@ -4,7 +4,6 @@ from pathlib import Path
 class Dot:
 
     def __init__(self):
-        self.result = ""
         self.home_directory = str(Path(__file__).parent.absolute().parent)
 
     def create_dot(self, data: []) -> object:
@@ -27,11 +26,13 @@ class Dot:
             obj_number += 1
         all_lines.append("}")
         for line in data:
-            print(line)
+            return line
 
         dot_file = open(self.home_directory + "\\resources\\JSClasses.dot", "w")
         if dot_file:
+            result = ""
             for attributes in all_lines:
                 dot_file.write(attributes)
-                self.result += attributes
+                result += attributes
         dot_file.close()
+        return result
