@@ -1,7 +1,7 @@
 from typing import Any
 from abstract_handler import AbstractHandler
-from converter import Converter
 from handler import Handler
+from js_convert import JSConvert
 
 
 class ConverterHandler(AbstractHandler):
@@ -13,12 +13,13 @@ class ConverterHandler(AbstractHandler):
         self.next_handler = handler
 
     def handle(self, request: Any) -> []:
-        classes = get_class(request)
-        functions = get_function(classes)
-        attributes = get_attributes(functions)
-        formatted =  classes, functions, attributes
-        if data:
+        js_convert = JSConvert
+        classes = js_convert.get_class(request)
+        functions = js_convert.get_function(classes, request)
+        attributes = js_convert.get_attributes(functions, request)
+        formatted = classes, functions, attributes
+        if formatted:
             try:
-                self.next_handler(data)
+                self.next_handler(formatted)
             except AssertionError as e:
                 print(e)
