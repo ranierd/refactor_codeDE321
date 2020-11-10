@@ -2,18 +2,18 @@ from i_builder import IBuilder
 from js_convert import JSConvert
 
 
-class Director:
+class ConverterDirector:
 
     def __init__(self) -> None:
-        self._builder = None
+        self.builder = None
 
     @property
     def builder(self) -> IBuilder:
-        return self._builder
+        return self.builder
 
     @builder.setter
     def builder(self, builder: IBuilder) -> None:
-        self._builder = builder
+        self.builder = builder
 
     def build_classes(self, data: []) -> None:
         return self.builder.get_classes(data)

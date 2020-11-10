@@ -1,10 +1,7 @@
 from unittest import TestCase
-from extraction_handler import ExtractionHandler
-from converter_handler import ConverterHandler
-from dot_handler import DotHandler
 from dot import Dot
 from js_convert import JSConvert
-from converter_director import Director
+from converter_director import ConverterDirector
 
 
 class TestCases(TestCase):
@@ -16,19 +13,8 @@ class TestCases(TestCase):
     def tear_down():
         print('Closing Tests')
 
-    def test_handlers(self):
-        extract = ExtractionHandler()
-        convert = ConverterHandler()
-        dot = DotHandler()
-        expected = extract.set_next_handler(convert).set_next_handler(dot)
-        try:
-            actual = extract.set_next_handler(convert).set_next_handler(dot)
-        except (TypeError, AttributeError) as e:
-            print(str(actual))
-        self.assertEqual(expected, actual)
-
-    def test_director_classes(self):
-        director = Director()
+    def director_classes_test(self):
+        director = ConverterDirector()
         builder = JSConvert()
         director.builder = builder
         src_code = open(self.setup())
@@ -46,7 +32,7 @@ class TestCases(TestCase):
         actual = js_converter.get_classes(all_lines)
         src_code.close()
         self.assertEqual(expected, actual)
-    
+
     def test_no_classes(self):
         js_converter = JSConvert()
         expected = []
@@ -56,7 +42,7 @@ class TestCases(TestCase):
     def test_error_classes(self):
         js_converter = JSConvert()
         expected = None
-        actual = js_converter.get_classes([])
+        actual = js_converter.get_classes([['']])
         self.assertEqual(expected, actual)
 
     def test_functions(self):
@@ -114,7 +100,56 @@ class TestCases(TestCase):
         js_convert = JSConvert()
         src_code = open(self.setup())
         all_lines = src_code.readlines()
-        expected = dot.create_dot(js_convert.merge(all_lines))
+        expected = 'digraph "classes"{\ncharset="utf-8"\nrankdir=BT\n' \
+                   '"0"[label="{Level|height\lwidth\lstartActors\lrows\lstartActors.push(\l|constructor()\l}", ' \
+                   'shape="record"];\n"1"[label="{State|level\lactors\lstatus\lactors.find(a\l|constructor()\lstart(' \
+                   ')\lplayer()\l}", shape="record"];\n"2"[label="{Vec|x\lx\lx\l|constructor()\lplus()\ltimes()\l}", ' \
+                   'shape="record"];\n"3"[label="{Player|pos\lspeed\l|constructor()\ltype()\l}", ' \
+                   'shape="record"];\n"4"[label="{Lava|pos\lspeed\lreset\l|constructor()\ltype()\l}", ' \
+                   'shape="record"];\n"5"[label="{Coin|pos\lbasePos\lwobble\l|constructor()\ltype()\l}", ' \
+                   'shape="record"];\n"6"[label="{DOMDisplay|actorLayer\ldom);\l|constructor()\l}", shape="record"];\n}'
         actual = dot.create_dot(js_convert.merge(all_lines))
         src_code.close()
+        self.assertEqual(expected, actual)
+
+    def test_converter_with_no_parameters(self):
+        # arrange
+        js_converter = JSConvert()
+        expected = "TypeError"
+        # act
+        try:
+            actual = js_converter.merge()
+        except TypeError as error:
+            actual = "TypeError"
+        # assert
+        print(str(actual))
+        self.assertEqual(expected, actual)
+
+    def test_converter_with_file(self):
+        # arrange
+        js_converter = JSConvert()
+        src_code = open(self.setup())
+        all_lines = src_code.readlines()
+        expected = [('Level', ('constructor()',), ('height', 'width', '\
+startActors', 'rows', 'startActors.push(')), ('State', ('co\
+nstructor()', 'start()', 'player()'), ('level', 'actors\
+', 'status', 'actors.find(a')), ('Vec', ('construct\
+or()', 'plus()', 'times()'), ('x', 'x', 'x')), ('\
+Player', ('constructor()', 'type()'), ('pos', '\
+speed')), ('Lava', ('constructor()', 'type()\
+'), ('pos', 'speed', 'reset')), ('Coin\
+', ('constructor()', 'type()'), ('pos', 'basePos', 'wobble')), ('DOMDis\
+play', ('constructor()',), ('actorLayer', 'dom);'))]
+        # act
+        actual = js_converter.merge(all_lines)
+        # assert
+        self.assertEqual(expected, actual)
+
+    def test_converter_with_bad_input(self):
+        js_converter = JSConvert()
+        expected = "Error"
+        try:
+            actual = js_converter.merge(None)
+        except TypeError:
+            actual = "Error"
         self.assertEqual(expected, actual)

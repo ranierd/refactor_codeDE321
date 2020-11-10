@@ -11,10 +11,11 @@ class AbstractHandler(Handler):
 
     next_handler: Handler = None
 
+    @abstractmethod
     def set_next_handler(self, handler: Handler) -> None:
         self.next_handler = handler
         return handler
-
+    
     @abstractmethod
     def handle(self, request: Any) -> str:
         if self.next_handler:

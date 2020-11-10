@@ -3,7 +3,6 @@ from abstract_handler import AbstractHandler
 from js_convert import JSConvert
 
 
-
 class ConverterHandler(AbstractHandler):
 
     def handle(self, request: Any) -> []:
@@ -14,4 +13,4 @@ class ConverterHandler(AbstractHandler):
             try:
                 super().handle(js_builder.merge(request))
             except (AssertionError, TypeError, AttributeError) as e:
-                print(e)
+                raise e

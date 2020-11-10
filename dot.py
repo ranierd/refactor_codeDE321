@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from js_convert import JSConvert
 
 class Dot:
 
@@ -9,7 +9,7 @@ class Dot:
     def create_dot(self, data: []) -> object:
         try:
             assert data is not None
-        except AssertionError as e:
+        except (AssertionError, TypeError) as e:
             print(e)
             return
         obj_number = 0
@@ -25,9 +25,6 @@ class Dot:
             all_lines.append(line)
             obj_number += 1
         all_lines.append("}")
-        for line in data:
-            return line
-
         dot_file = open(self.home_directory + "\\resources\\JSClasses.dot", "w")
         if dot_file:
             result = ""
@@ -36,3 +33,11 @@ class Dot:
                 result += attributes
         dot_file.close()
         return result
+
+
+if __name__ == '__main__':
+    src_code = open("C:\\Users\\Ranier\\Downloads\\python-assignment-master\\resources\\16_game.js")
+    all_lines = src_code.readlines()
+    js_array = JSConvert().merge(all_lines)
+    Dot().create_dot(js_array)
+    Dot().create_dot(None)
