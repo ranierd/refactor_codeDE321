@@ -1,4 +1,3 @@
-from itertools import cycle
 from re import findall, search
 from i_builder import IBuilder
 
@@ -6,37 +5,37 @@ from i_builder import IBuilder
 class JSConvert(IBuilder):
 
     def get_classes(self, data: []):
-        classes = []
         try:
+            classes = []
             for line in data:
                 result = search("class .* {", line)
                 if result:
                     classes.append(findall(r'class (\S+).*{', line))
             return classes
-        except (AssertionError, FileNotFoundError, PermissionError, AttributeError) as e:
-            print(e)
+        except (AssertionError, FileNotFoundError, PermissionError, AttributeError, TypeError) as e:
+            raise e
 
     def get_functions(self, data: []):
-        functions = []
         try:
+            functions = []
             for line in data:
                 current_level = findall(r'(\S+)[(].*[)].*{', line)
                 if current_level:
                     functions.append(current_level[0] + "()")
             return functions
         except (AssertionError, TypeError, AttributeError, IndexError) as e:
-            print(e)
+            raise e
 
     def get_attributes(self, data: []):
-        attributes = []
         try:
+            attributes = []
             for line in data:
                 attribute = findall(r'this\.(\S+)', line)
                 if attribute:
                     attributes.append(attribute)
             return attributes
         except (AssertionError, TypeError, AttributeError) as e:
-            print(e)
+            raise e
 
     def merge(self, data: []):
         classes = []

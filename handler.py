@@ -11,8 +11,8 @@ class Handler(ABC):
 
     @abstractmethod
     def set_next_handler(self, handler: Handler) -> Handler:
-        pass
+        """Sets next handler"""
 
     @abstractmethod
     def handle(self, request) -> Optional[str]:
-        pass
+        """Handles the request"""

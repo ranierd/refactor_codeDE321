@@ -12,4 +12,4 @@ class ExtractionHandler(AbstractHandler):
             try:
                 super().handle(all_lines)
             except (AssertionError, FileNotFoundError, FileExistsError) as e:
-                print(e)
+                raise e

@@ -4,6 +4,7 @@ from converter_handler import ConverterHandler
 from dot_handler import DotHandler
 from dot import Dot
 from js_convert import JSConvert
+from converter_director import Director
 
 
 class TestCases(TestCase):
@@ -26,13 +27,36 @@ class TestCases(TestCase):
             print(str(actual))
         self.assertEqual(expected, actual)
 
+    def test_director_classes(self):
+        director = Director()
+        builder = JSConvert()
+        director.builder = builder
+        src_code = open(self.setup())
+        all_lines = src_code.readlines()
+        expected = director.builder.get_classes(all_lines)
+        actual = builder.get_classes(all_lines)
+        src_code.close()
+        self.assertEqual(expected, actual)
+
     def test_classes(self):
         js_converter = JSConvert()
         src_code = open(self.setup())
         all_lines = src_code.readlines()
-        expected = js_converter.get_classes(all_lines).classes
+        expected = [['Level'], ['State'], ['Vec'], ['Player'], ['Lava'], ['Coin'], ['DOMDisplay']]
         actual = js_converter.get_classes(all_lines)
         src_code.close()
+        self.assertEqual(expected, actual)
+    
+    def test_no_classes(self):
+        js_converter = JSConvert()
+        expected = []
+        actual = js_converter.get_classes([])
+        self.assertEqual(expected, actual)
+
+    def test_error_classes(self):
+        js_converter = JSConvert()
+        expected = None
+        actual = js_converter.get_classes([])
         self.assertEqual(expected, actual)
 
     def test_functions(self):
