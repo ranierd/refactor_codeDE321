@@ -33,11 +33,3 @@ class Dot:
                 result += attributes
         dot_file.close()
         return result
-
-
-if __name__ == '__main__':
-    src_code = open("C:\\Users\\Ranier\\Downloads\\python-assignment-master\\resources\\16_game.js")
-    all_lines = src_code.readlines()
-    js_array = JSConvert().merge(all_lines)
-    Dot().create_dot(js_array)
-    Dot().create_dot(None)

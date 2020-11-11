@@ -93,20 +93,3 @@ class JSConvertBuilder(IBuilder):
                 if attribute:
                     attributes.append(attribute[0])
         return classes
-
-
-if __name__ == '__main__':
-    src_code = open("C:\\Users\\Ranier\\Downloads\\python-assignment-master\\resources\\16_game.js")
-    all_lines = src_code.readlines()
-
-    """Working Functions"""
-    JSConvert().get_classes(all_lines)
-    JSConvert().get_functions(all_lines)
-    JSConvert().get_attributes(all_lines)
-    JSConvert().merge(all_lines)
-
-    """Not Working"""
-    JSConvert().get_classes(None)
-    JSConvert().get_functions(None)
-    JSConvert().get_attributes(None)
-    JSConvert().merge(None)

@@ -1,17 +1,9 @@
 class JSConvert:
-
+    """Used by the builder so that when a director uses a builder it has"""
     def __init__(self):
         self.classes = []
 
-    def build_classes(self, data: []):
-        self.classes.append(data)
+    def add(self, data: []):
+        return self.classes.append(data)
 
-    def build_functions(self, data: []):
-        self.classes.append(data)
-
-    def build_attributes(self, data: []):
-        self.classes.append(data)
-
-    def merge(self, data: []):
-        self.classes.append(data)
 
