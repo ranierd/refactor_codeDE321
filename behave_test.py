@@ -1,12 +1,27 @@
 import unittest
 from dot import Dot
-from js_convert import JSConvert
+from js_convert_builder import JSConvert
+from js_convert_director import JSConvertDirector
+from js_convert_builder import JSConvertBuilder
+from pathlib import Path
 
 
 class TestCases(unittest.TestCase):
 
     def setup(self):
-        return "C:\\Users\\Ranier\\Downloads\\python-assignment-master\\resources\\16_game.js"
+        return open((str(Path(__file__).parent.absolute().parent) + "\\resources\\16_game.js"))
+
+    def test_director(self):
+        director = JSConvertDirector()
+        builder = JSConvertBuilder()
+        director.builder = builder
+        src_code = self.setup()
+        all_lines = src_code.readlines()
+        expected = director.build_classes(all_lines)
+        actual = builder.get_classes(all_lines)
+        self.assertEquals(expected, actual)
+
+        director.build_classes(all_lines)
 
     def test_classes(self):
         js_converter = JSConvert()
@@ -82,16 +97,16 @@ class TestCases(unittest.TestCase):
     def test_dot_file(self):
         dot = Dot()
         js_convert = JSConvert()
-        src_code = open(self.setup())
+        src_code = self.setup()
         all_lines = src_code.readlines()
-        expected = 'digraph "classes"{\ncharset="utf-8"\nrankdir=BT\n' \
-                   '"0"[label="{Level|height\lwidth\lstartActors\lrows\lstartActors.push(\l|constructor()\l}", ' \
-                   'shape="record"];\n"1"[label="{State|level\lactors\lstatus\lactors.find(a\l|constructor()\lstart(' \
-                   ')\lplayer()\l}", shape="record"];\n"2"[label="{Vec|x\lx\lx\l|constructor()\lplus()\ltimes()\l}", ' \
-                   'shape="record"];\n"3"[label="{Player|pos\lspeed\l|constructor()\ltype()\l}", ' \
-                   'shape="record"];\n"4"[label="{Lava|pos\lspeed\lreset\l|constructor()\ltype()\l}", ' \
-                   'shape="record"];\n"5"[label="{Coin|pos\lbasePos\lwobble\l|constructor()\ltype()\l}", ' \
-                   'shape="record"];\n"6"[label="{DOMDisplay|actorLayer\ldom);\l|constructor()\l}", shape="record"];\n}'
+        expected = 'digraph "classes"{\ncharset="utf-8"\nrankdir=BT\n'
+        "\"0\"[label=\"{Level|height\lwidth\lstartActors\lrows\lstartActors.push(\l|constructor()\l}\", "
+        "shape=\"record\"];\n\"1\"[label=\"{State|level\lactors\lstatus\lactors.find(a\l|constructor()\lstart("
+        ")\lplayer()\l}\", shape=\"record\"];\n\"2\"[label=\"{Vec|x\lx\lx\l|constructor()\lplus()\ltimes()\l}\", "
+        "shape=\"record\"];\n\"3\"[label=\"{Player|pos\lspeed\l|constructor()\ltype()\l}\", "
+        "shape=\"record\"];\n\"4\"[label=\"{Lava|pos\lspeed\lreset\l|constructor()\ltype()\l}\", "
+        "shape=\"record\"];\n\"5\"[label=\"{Coin|pos\lbasePos\lwobble\l|constructor()\ltype()\l}\", "
+        "shape=\"record\"];\n\"6\"[label=\"{DOMDisplay|actorLayer\ldom);\l|constructor()\l}\", shape=\"record\"];\n}"
         actual = dot.create_dot(js_convert.merge(all_lines))
         src_code.close()
         self.assertEquals(expected, actual)
@@ -120,7 +135,7 @@ speed')), ('Lava', ('constructor()', 'type()\
 '), ('pos', 'speed', 'reset')), ('Coin\
 ', ('constructor()', 'type()'), ('pos', 'basePos', 'wobble')), ('DOMDis\
 play', ('constructor()',), ('actorLayer', 'dom);'))]
-        self.assertEquals(expected,  js_converter.merge(all_lines))
+        self.assertEquals(expected, js_converter.merge(all_lines))
 
     def test_converter_with_bad_input(self):
         js_converter = JSConvert()

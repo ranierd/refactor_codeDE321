@@ -1,12 +1,12 @@
-from extraction_handler import ExtractionHandler
-from converter_handler import ConverterHandler
-from dot_handler import DotHandler
-
+from js_convert_director import JSConvertDirector
+from js_convert_builder import JSConvertBuilder
+from pathlib import Path
 
 if __name__ == '__main__':
+    director = JSConvertDirector()
+    builder = JSConvertBuilder()
+    director.builder = builder
+    src_code = open((str(Path(__file__).parent.absolute().parent)+"\\resources\\16_game.js"))
+    all_lines = src_code.readlines()
 
-    extract = ExtractionHandler()
-    convert = ConverterHandler()
-    dot = DotHandler()
-
-    extract.set_next_handler(convert.set_next_handler(dot))
+    director.build_classes(all_lines)

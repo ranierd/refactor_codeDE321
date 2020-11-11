@@ -1,5 +1,5 @@
 from pathlib import Path
-from js_convert import JSConvert
+from js_convert_builder import JSConvert
 
 class Dot:
 
