@@ -201,14 +201,14 @@ play', ('constructor()',), ('actorLayer', 'dom);'))]
         self.assertEquals(builder.convert.add("classes"), actual)
 
     def test_pickler(self):
-        """Test to make sure that this cannot be used directly without builder"""
+        """Test the pickler (Not working)"""
         dot = Dot()
         data = dot.create_dot(self.builder().merge(self.setup()))
         pickler = Pickler()
         self.assertEquals(pickler.create(data), None)
 
     def test_UML(self):
-        """Test the UML file"""
+        """Test the UML file (not working)"""
         dot = Dot()
         dot.create_dot(self.builder().merge(self.setup()))
         uml = UML()
